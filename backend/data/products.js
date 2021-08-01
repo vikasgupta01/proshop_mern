@@ -79,8 +79,8 @@ const products = [
     },
 ]
 
-// export default products
-// ^ this export is from es-modules. Since it's not setup for our backend yet, and since we're still using commonJS, we'll use export
-// belonging to commonJS
+export default products
+// ^ this export is from es-modules.
 
-module.exports = products
+// module.exports = products
+// ^ this export is for commonJS
