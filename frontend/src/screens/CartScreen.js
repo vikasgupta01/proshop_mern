@@ -10,16 +10,7 @@ import { addToCart, removeFromCart } from "../actions/cartActions";
 import Message from "../components/Message";
 
 const CartScreen = ({ match, location, history }) => {
-  const productId = match.params.id;
-  const qty = location.search ? Number(location.search.split("=")[1]) : 1;
-
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (productId) {
-      dispatch(addToCart(productId, qty));
-    }
-  }, [dispatch, productId, qty]);
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
@@ -89,23 +80,26 @@ const CartScreen = ({ match, location, history }) => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                Subtotal (
+                {cartItems.reduce((acc, item) => acc + Number(item.qty), 0)})
                 Items
               </h2>
               $
               {cartItems
-                .reduce((acc, item) => (acc = acc + item.price * item.qty), 0)
+                .reduce((acc, item) => acc + item.price * item.qty, 0)
                 .toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button
-                type="button"
-                className="btn-block"
-                disabled={cartItems.length === 0}
-                onClick={checkoutHandler}
-              >
-                Proceed To Checkout
-              </Button>
+              <Row>
+                <Button
+                  type="button"
+                  className="btn-block"
+                  disabled={cartItems.length === 0}
+                  onClick={checkoutHandler}
+                >
+                  Proceed To Checkout
+                </Button>
+              </Row>
             </ListGroup.Item>
           </ListGroup>
         </Card>
