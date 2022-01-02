@@ -1,25 +1,36 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect } from "react";
+import { Button, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Button,
-  Row,
-  Col,
-  Column,
-  ListGroup,
-  Image,
-  Card,
-} from "react-bootstrap";
-import { register } from "../actions/userActions";
-import Message from "../components/Message";
-import { saveShippingAddress } from "../actions/cartActions";
-import CheckoutSteps from "../components/CheckoutSteps";
 import { Link } from "react-router-dom";
+import { createOrder } from "../actions/orderActions";
+import CheckoutSteps from "../components/CheckoutSteps";
+import Message from "../components/Message";
 
-const PlaceOrderScreen = () => {
+const PlaceOrderScreen = ({ history }) => {
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  const orderCreate = useSelector((state) => state.orderCreate);
+  const { order, success, error } = orderCreate;
+
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`);
+    }
+    // eslint-disable-next-line
+  }, [history, success]);
+
   const placeOrderHandler = () => {
-    console.log("Order Placed");
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
   };
 
   // Calculate Prices
@@ -126,6 +137,9 @@ const PlaceOrderScreen = () => {
                   <Col>Total</Col>
                   <Col>${cart.totalPrice}</Col>
                 </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
