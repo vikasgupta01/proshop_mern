@@ -199,7 +199,9 @@ const OrderScreen = ({ match }) => {
                         amount={order.totalPrice}
                         onSuccess={successPaymentHandler}
                       />
-                      <Button onClick={successPaymentShortcut}>Pay</Button>
+                      <Row>
+                        <Button onClick={successPaymentShortcut}>Pay</Button>
+                      </Row>
                     </div>
                   )}
                 </ListGroup.Item>
