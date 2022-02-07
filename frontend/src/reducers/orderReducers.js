@@ -2,6 +2,7 @@ import {
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
   ORDER_CREATE_FAIL,
+  ORDER_CREATE_RESET,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
   ORDER_DETAILS_FAIL,
@@ -12,6 +13,7 @@ import {
   ORDER_LIST_USER_REQUEST,
   ORDER_LIST_USER_SUCCESS,
   ORDER_LIST_USER_FAIL,
+  ORDER_LIST_USER_RESET,
 } from "../constants/orderConstants";
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -32,6 +34,8 @@ export const orderCreateReducer = (state = {}, action) => {
         success: false,
         error: action.payload,
       };
+    case ORDER_CREATE_RESET:
+      return {};
     default:
       return state;
   }
@@ -86,28 +90,23 @@ export const orderPayReducer = (state = {}, action) => {
 };
 
 export const orderListUserReducer = (state = { orders: [] }, action) => {
-  // console.log("console logging action in orderReducersListUser: ", action);
   switch (action.type) {
     case ORDER_LIST_USER_REQUEST:
-      // console.log("in ORDER_LIST_USER_REQUEST case...");
       return {
         loading: true,
       };
     case ORDER_LIST_USER_SUCCESS:
-      // console.log(
-      //   "in ORDER_LIST_USER_SUCCESS case... action.payload: ",
-      //   action.payload
-      // );
       return {
         loading: false,
         orders: action.payload,
       };
     case ORDER_LIST_USER_FAIL:
-      // console.log("in ORDER_LIST_USER_FAIL case...");
       return {
         loading: false,
         error: action.payload,
       };
+    case ORDER_LIST_USER_RESET:
+      return { orders: [] };
     default:
       console.log("in default case...");
       return state;
