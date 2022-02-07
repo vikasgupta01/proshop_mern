@@ -9,6 +9,9 @@ import {
   ORDER_PAY_FAIL,
   ORDER_PAY_REQUEST,
   ORDER_PAY_SUCCESS,
+  ORDER_LIST_USER_REQUEST,
+  ORDER_LIST_USER_SUCCESS,
+  ORDER_LIST_USER_FAIL,
 } from "../constants/orderConstants";
 
 export const createOrder = (order) => async (dispatch, getState) => {
@@ -116,3 +119,43 @@ export const payOrder =
       });
     }
   };
+
+export const listUserOrders = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ORDER_LIST_USER_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    // console.log("inside listUserOrders Action in orderActionsFile");
+    const { data } = await axios.get(`/api/orders/myorders`, config);
+    // console.log(
+    //   "inside listUserOrders Action in orderActionsFile: data: ",
+    //   data
+    // );
+
+    dispatch({
+      type: ORDER_LIST_USER_SUCCESS,
+      payload: data,
+    });
+    // console.log("after last dispatch in orderActions");
+  } catch (error) {
+    // console.log("caught in orderActions Saga");
+    dispatch({
+      type: ORDER_LIST_USER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
