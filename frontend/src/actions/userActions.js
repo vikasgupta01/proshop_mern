@@ -160,6 +160,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        // TODO: why are we sending Content-Type sometimes, but now always.
         "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
